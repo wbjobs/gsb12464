@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>本地文件管理器 · File System Access</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <h1>本地文件管理器</h1>
+    <p class="subtitle">基于 File System Access API · 权限透明 · 自动降级</p>
+  </header>
+
+  <!-- 状态面板：权限状态 / 目录句柄 / 授权时间 / 持久化状态 -->
+  <section id="status-panel" class="card">
+    <h2>状态</h2>
+    <dl class="status-grid">
+      <dt>环境</dt><dd id="env-status">检测中…</dd>
+      <dt>权限状态</dt><dd><span id="perm-status" class="badge badge-unknown">未知</span></dd>
+      <dt>目录句柄</dt><dd id="dir-name">—</dd>
+      <dt>授权时间</dt><dd id="granted-at">—</dd>
+      <dt>句柄持久化</dt><dd id="persist-status">—</dd>
+    </dl>
+    <div class="actions">
+      <button id="btn-pick" type="button">选择目录并授权</button>
+      <button id="btn-reauth" type="button" hidden>权限失效，点击重新授权</button>
+      <button id="btn-forget" type="button" hidden>清除已保存的授权</button>
+    </div>
+    <p id="status-message" class="message" role="status"></p>
+  </section>
+
+  <!-- 主模式：File System Access API -->
+  <main id="browser" class="card" hidden>
+    <div class="toolbar">
+      <button id="btn-up" type="button" title="返回上级">⬆ 上级</button>
+      <span id="breadcrumb" class="breadcrumb">/</span>
+      <span class="spacer"></span>
+      <button id="btn-new-file" type="button">新建文件</button>
+      <button id="btn-refresh" type="button">刷新</button>
+    </div>
+    <div class="panes">
+      <ul id="file-list" class="file-list" aria-label="目录内容"></ul>
+      <div class="preview">
+        <div class="preview-header">
+          <strong id="preview-name">未选择文件</strong>
+          <span id="preview-meta" class="meta"></span>
+        </div>
+        <textarea id="editor" placeholder="点击左侧文件预览内容；可编辑后保存" spellcheck="false"></textarea>
+        <div class="actions">
+          <button id="btn-save" type="button" disabled>保存</button>
+          <button id="btn-retry-save" type="button" hidden>写入失败，重试</button>
+          <button id="btn-delete" type="button" class="danger" disabled>删除</button>
+          <span id="save-status" class="meta"></span>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- 降级模式：文件选择 / 下载 -->
+  <main id="fallback" class="card" hidden>
+    <h2>兼容模式（降级方案）</h2>
+    <p class="message" id="fallback-reason"></p>
+    <p>当前环境无法直接读写本地目录，已切换为降级方案：</p>
+    <ul class="notes">
+      <li>「打开」→ 通过文件选择器读取文件并预览；</li>
+      <li>「保存」→ 通过浏览器下载写回文件（需手动覆盖原文件）；</li>
+      <li>「删除」→ 降级模式不支持，请在系统文件管理器中操作。</li>
+    </ul>
+    <div class="actions">
+      <button id="btn-fallback-open" type="button">打开文件</button>
+      <button id="btn-fallback-open-dir" type="button">打开整个目录</button>
+    </div>
+    <div class="panes">
+      <ul id="fallback-list" class="file-list" aria-label="已选择的文件"></ul>
+      <div class="preview">
+        <div class="preview-header">
+          <strong id="fallback-preview-name">未选择文件</strong>
+          <span id="fallback-preview-meta" class="meta"></span>
+        </div>
+        <textarea id="fallback-editor" placeholder="预览内容；编辑后可下载保存" spellcheck="false"></textarea>
+        <div class="actions">
+          <button id="btn-fallback-download" type="button" disabled>下载保存</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div id="toast" class="toast" hidden></div>
+
+  <script src="js/db.js"></script>
+  <script src="js/fs-access.js"></script>
+  <script src="js/fallback.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
