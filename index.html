@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>本地文件夹访问演示 · File System Access API</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-dot" id="brandDot"></span>
+      <h1>本地文件夹访问</h1>
+    </div>
+    <div class="actions">
+      <button id="btnPick" class="btn primary" type="button">申请目录访问权限</button>
+      <button id="btnReauth" class="btn warn hidden" type="button">重新授权</button>
+      <button id="btnRefresh" class="btn" type="button">刷新目录</button>
+    </div>
+  </header>
+
+  <section id="banner" class="banner hidden" role="alert"></section>
+
+  <section class="perm-card">
+    <div class="perm-row">
+      <span class="perm-label">权限状态</span>
+      <span id="permState" class="perm-badge unknown">检测中…</span>
+    </div>
+    <div class="perm-row">
+      <span class="perm-label">目录句柄</span>
+      <code id="dirHandle">尚未获取</code>
+    </div>
+    <div class="perm-row">
+      <span class="perm-label">授权时间</span>
+      <span id="grantedAt">—</span>
+    </div>
+    <div class="perm-row">
+      <span class="perm-label">运行模式</span>
+      <span id="modeState">检测中…</span>
+    </div>
+  </section>
+
+  <main class="workspace">
+    <aside class="sidebar">
+      <div class="sidebar-toolbar">
+        <button id="btnNewFile" class="btn small" type="button" disabled>＋ 新文件</button>
+        <button id="btnNewFolder" class="btn small" type="button" disabled>＋ 新文件夹</button>
+      </div>
+      <nav class="crumbs" id="crumbs" aria-label="面包屑"></nav>
+      <ul class="entry-list" id="entryList"></ul>
+    </aside>
+
+    <section class="viewer" id="viewer">
+      <div class="viewer-empty" id="viewerEmpty">
+        <p>从左侧选择一个文件进行预览，或点击顶部「申请目录访问权限」。</p>
+      </div>
+      <div class="viewer-file hidden" id="viewerFile">
+        <div class="viewer-head">
+          <div class="viewer-title">
+            <strong id="fileName"></strong>
+            <span id="fileMeta" class="file-meta"></span>
+          </div>
+          <div class="viewer-actions">
+            <button id="btnSave" class="btn primary small" type="button" disabled>保存写入</button>
+            <button id="btnDownload" class="btn small" type="button">下载副本</button>
+            <button id="btnDelete" class="btn danger small" type="button" disabled>删除</button>
+          </div>
+        </div>
+        <pre class="text-preview hidden" id="textPreview"><textarea id="editor" spellcheck="false"></textarea></pre>
+        <div class="media-preview hidden" id="mediaPreview"></div>
+        <div class="info-card hidden" id="infoCard"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="statusbar">
+    <span id="statusMessage">就绪</span>
+  </footer>
+
+  <div id="toastHost" class="toast-host" aria-live="polite"></div>
+  <div id="modalHost" class="modal-host hidden"></div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
